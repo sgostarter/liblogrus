@@ -6,8 +6,17 @@ import (
 )
 
 func NewLogrus() logger.Logger {
+	return NewLogrusEx(nil)
+}
+
+func NewLogrusEx(logger *logrus.Logger) logger.Logger {
+	if logger == nil {
+		logger = logrus.New()
+		logger.SetFormatter(new(logrus.JSONFormatter))
+	}
+
 	return &logrusImpl{
-		rl: logrus.NewEntry(logrus.New()),
+		rl: logrus.NewEntry(logger),
 	}
 }
 
