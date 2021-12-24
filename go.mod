@@ -3,7 +3,7 @@ module github.com/sgostarter/liblogrus
 go 1.17
 
 require (
-	github.com/sgostarter/i v0.0.7
+	github.com/sgostarter/i v0.1.0
 	github.com/sirupsen/logrus v1.8.1
 )
 

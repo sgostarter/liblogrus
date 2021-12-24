@@ -4,12 +4,11 @@ import (
 	"testing"
 
 	"github.com/sgostarter/i/l"
-	"github.com/sgostarter/i/logger"
 )
 
 func Test1(t *testing.T) {
 	rl := NewLogrus()
-	rl.SetLevel(logger.LevelInfo)
+	rl.SetLevel(l.LevelInfo)
 
 	log := l.NewWrapper(NewLogrus())
 

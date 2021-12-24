@@ -1,15 +1,15 @@
 package liblogrus
 
 import (
-	"github.com/sgostarter/i/logger"
+	"github.com/sgostarter/i/l"
 	"github.com/sirupsen/logrus"
 )
 
-func NewLogrus() logger.Logger {
+func NewLogrus() l.Logger {
 	return NewLogrusEx(nil)
 }
 
-func NewLogrusEx(logger *logrus.Logger) logger.Logger {
+func NewLogrusEx(logger *logrus.Logger) l.Logger {
 	if logger == nil {
 		logger = logrus.New()
 		logger.SetFormatter(new(logrus.JSONFormatter))
@@ -24,28 +24,28 @@ type logrusImpl struct {
 	rl *logrus.Entry
 }
 
-func (impl *logrusImpl) mapLevel(level logger.Level) logrus.Level {
+func (impl *logrusImpl) mapLevel(level l.Level) logrus.Level {
 	switch level {
-	case logger.LevelFatal:
+	case l.LevelFatal:
 		return logrus.FatalLevel
-	case logger.LevelError:
+	case l.LevelError:
 		return logrus.ErrorLevel
-	case logger.LevelWarn:
+	case l.LevelWarn:
 		return logrus.WarnLevel
-	case logger.LevelInfo:
+	case l.LevelInfo:
 		return logrus.InfoLevel
-	case logger.LevelDebug:
+	case l.LevelDebug:
 		return logrus.DebugLevel
 	}
 
 	return logrus.FatalLevel
 }
 
-func (impl *logrusImpl) SetLevel(level logger.Level) {
+func (impl *logrusImpl) SetLevel(level l.Level) {
 	impl.rl.Logger.SetLevel(impl.mapLevel(level))
 }
 
-func (impl *logrusImpl) WithFields(fields ...logger.Field) logger.Logger {
+func (impl *logrusImpl) WithFields(fields ...l.Field) l.Logger {
 	fs := make(map[string]interface{})
 	for _, field := range fields {
 		fs[field.K] = field.V
@@ -56,10 +56,10 @@ func (impl *logrusImpl) WithFields(fields ...logger.Field) logger.Logger {
 	}
 }
 
-func (impl *logrusImpl) Log(level logger.Level, a ...interface{}) {
+func (impl *logrusImpl) Log(level l.Level, a ...interface{}) {
 	impl.rl.Log(impl.mapLevel(level), a...)
 }
 
-func (impl *logrusImpl) Logf(level logger.Level, format string, a ...interface{}) {
+func (impl *logrusImpl) Logf(level l.Level, format string, a ...interface{}) {
 	impl.rl.Logf(impl.mapLevel(level), format, a...)
 }
