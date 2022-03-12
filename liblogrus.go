@@ -57,9 +57,19 @@ func (impl *logrusImpl) WithFields(fields ...l.Field) l.Logger {
 }
 
 func (impl *logrusImpl) Log(level l.Level, a ...interface{}) {
-	impl.rl.Log(impl.mapLevel(level), a...)
+	mLevel := impl.mapLevel(level)
+	if mLevel == logrus.FatalLevel {
+		impl.rl.Fatal(a...)
+	} else {
+		impl.rl.Log(mLevel, a...)
+	}
 }
 
 func (impl *logrusImpl) Logf(level l.Level, format string, a ...interface{}) {
-	impl.rl.Logf(impl.mapLevel(level), format, a...)
+	mLevel := impl.mapLevel(level)
+	if mLevel == logrus.FatalLevel {
+		impl.rl.Fatalf(format, a...)
+	} else {
+		impl.rl.Logf(impl.mapLevel(level), format, a...)
+	}
 }
