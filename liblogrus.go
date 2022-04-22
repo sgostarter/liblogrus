@@ -15,13 +15,16 @@ func NewLogrusEx(logger *logrus.Logger) l.Logger {
 		logger.SetFormatter(new(logrus.JSONFormatter))
 	}
 
+	logger.SetLevel(logrus.TraceLevel)
+
 	return &logrusImpl{
 		rl: logrus.NewEntry(logger),
 	}
 }
 
 type logrusImpl struct {
-	rl *logrus.Entry
+	rl    *logrus.Entry
+	level l.Level
 }
 
 func (impl *logrusImpl) mapLevel(level l.Level) logrus.Level {
@@ -42,7 +45,7 @@ func (impl *logrusImpl) mapLevel(level l.Level) logrus.Level {
 }
 
 func (impl *logrusImpl) SetLevel(level l.Level) {
-	impl.rl.Logger.SetLevel(impl.mapLevel(level))
+	impl.level = level
 }
 
 func (impl *logrusImpl) WithFields(fields ...l.Field) l.Logger {
@@ -57,6 +60,10 @@ func (impl *logrusImpl) WithFields(fields ...l.Field) l.Logger {
 }
 
 func (impl *logrusImpl) Log(level l.Level, a ...interface{}) {
+	if level > impl.level {
+		return
+	}
+
 	mLevel := impl.mapLevel(level)
 	if mLevel == logrus.FatalLevel {
 		impl.rl.Fatal(a...)
@@ -66,6 +73,10 @@ func (impl *logrusImpl) Log(level l.Level, a ...interface{}) {
 }
 
 func (impl *logrusImpl) Logf(level l.Level, format string, a ...interface{}) {
+	if level > impl.level {
+		return
+	}
+
 	mLevel := impl.mapLevel(level)
 	if mLevel == logrus.FatalLevel {
 		impl.rl.Fatalf(format, a...)
