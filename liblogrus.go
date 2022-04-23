@@ -18,7 +18,8 @@ func NewLogrusEx(logger *logrus.Logger) l.Logger {
 	logger.SetLevel(logrus.TraceLevel)
 
 	return &logrusImpl{
-		rl: logrus.NewEntry(logger),
+		rl:    logrus.NewEntry(logger),
+		level: l.LevelInfo,
 	}
 }
 
