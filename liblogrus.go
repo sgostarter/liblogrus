@@ -56,7 +56,8 @@ func (impl *logrusImpl) WithFields(fields ...l.Field) l.Logger {
 	}
 
 	return &logrusImpl{
-		rl: impl.rl.WithFields(logrus.Fields(fs)),
+		rl:    impl.rl.WithFields(fs),
+		level: impl.level,
 	}
 }
 
